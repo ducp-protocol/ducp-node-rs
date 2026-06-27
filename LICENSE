@@ -1,0 +1,27 @@
+DUCP Node — License Notice
+(DRAFT — pending counsel review; informational only, not legal advice)
+
+Copyright (c) 2026 Pawan Singh. All rights reserved.
+
+Intended license: Business Source License 1.1 (BSL 1.1), a source-available
+license, with the following parameters:
+
+  Licensor:             Pawan Singh
+  Licensed Work:        DUCP Node (this repository)
+  Change Date:          (to be set — e.g., the date DUCP reaches v1.0, or a fixed
+                        date such as four years after each version's release)
+  Change License:       Apache License, Version 2.0
+  Additional Use Grant: (to be defined — e.g., non-production / evaluation use)
+
+Summary of intent: under BSL 1.1 the source is publicly available and may be
+copied, modified, and used subject to the license terms; on the Change Date the
+Licensed Work automatically converts to the Change License (Apache-2.0).
+Production use before the Change Date requires a separate grant from the Licensor
+unless permitted by the Additional Use Grant.
+
+The canonical BSL 1.1 text is published at https://mariadb.com/bsl11/. This file
+is a placeholder summarizing licensing intent; the full, parameterized license
+text will be inserted here once finalized with counsel.
+
+Trademarks: "DUCP", "Decentralized Universal Compute Protocol", and the U (UCU)
+mark are trademarks of the author and are not licensed hereunder.

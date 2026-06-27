@@ -1,0 +1,11 @@
+[package]
+name = "ducp-dvm"
+description = "DUCP Virtual Machine: standard deterministic execution and UCU metering"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]

@@ -1,0 +1,23 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/dvm",
+    "crates/verification",
+    "crates/ledger",
+    "crates/consensus",
+    "crates/governance",
+    "node",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+license = "BUSL-1.1"
+authors = ["Pawan Singh <mr.singhpawan@gmail.com>"]
+repository = "https://github.com/ducp-protocol/ducp-node-rs"
+homepage = "https://github.com/ducp-protocol/spec"
+
+[workspace.dependencies]
+# Shared dependencies are declared here and referenced from member crates with
+# `<dep>.workspace = true` as the implementation grows.

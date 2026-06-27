@@ -1,0 +1,20 @@
+[package]
+name = "ducp-node"
+description = "DUCP reference node — runs a node on the DUCP network"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "ducp-node"
+path = "src/main.rs"
+
+[dependencies]
+ducp-dvm = { path = "../crates/dvm" }
+ducp-verification = { path = "../crates/verification" }
+ducp-ledger = { path = "../crates/ledger" }
+ducp-consensus = { path = "../crates/consensus" }
+ducp-governance = { path = "../crates/governance" }

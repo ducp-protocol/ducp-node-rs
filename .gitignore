@@ -1,0 +1,10 @@
+# Rust build output
+/target
+
+# Backup files
+**/*.rs.bk
+
+# Editor / OS cruft
+.DS_Store
+
+# Cargo.lock IS committed: this workspace produces a binary (the node).

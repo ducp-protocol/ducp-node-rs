@@ -9,3 +9,7 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
+ducp-types.workspace = true
+wasmtime.workspace = true
+wat.workspace = true
+borsh.workspace = true

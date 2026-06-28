@@ -1,0 +1,34 @@
+{
+  "ucu": "50000000000000",
+  "providers": [
+    {
+      "label": "A",
+      "micro_q": 428571,
+      "seal_grade": "S1",
+      "boundary": "node",
+      "paid_ucu": "50000000000000"
+    },
+    {
+      "label": "B",
+      "micro_q": 1000000,
+      "seal_grade": "S2",
+      "boundary": "chip",
+      "paid_ucu": "50000000000000"
+    },
+    {
+      "label": "C",
+      "micro_q": 1644000,
+      "seal_grade": "S2",
+      "boundary": "chip",
+      "paid_ucu": "50000000000000"
+    },
+    {
+      "label": "D",
+      "micro_q": null,
+      "seal_grade": null,
+      "boundary": null,
+      "paid_ucu": "50000000000000"
+    }
+  ],
+  "all_payments_equal": true
+}

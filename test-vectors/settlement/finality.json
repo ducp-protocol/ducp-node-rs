@@ -1,0 +1,22 @@
+{
+  "epoch": 32,
+  "provider": {
+    "id": "8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394",
+    "balance": "104040000000",
+    "escrowed": "0",
+    "bonded": "0"
+  },
+  "receipt": {
+    "task": "3aa7e2573318aa44cefeb9ad80d0e3feff046678d4c12555adf38d7bcbca85d5",
+    "paid_to_provider": "4000000000",
+    "work_issuance": "40000000",
+    "validator_fee": "10000000",
+    "standing_delta": "4000000000",
+    "settled_epoch": 0,
+    "clawback_until": 32
+  },
+  "released": true,
+  "receipt_unchanged": true,
+  "conserved": true,
+  "state_root": "0dabb4ddc416dfd14b1ba29ba7d9be2ede4311494e01f680c529288ef3e9669b"
+}

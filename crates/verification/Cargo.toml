@@ -1,6 +1,6 @@
 [package]
 name = "ducp-verification"
-description = "Layered verification: TEE attestation, ZK proofs, and sampled re-execution"
+description = "Layered verification: sampled re-execution + challenge (TEE/ZK reserved)"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -9,4 +9,5 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
-ducp-types = { path = "../ducp-types" }
+ducp-types.workspace = true
+ducp-dvm.workspace = true

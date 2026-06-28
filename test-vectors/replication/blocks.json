@@ -1,0 +1,11 @@
+{
+  "blocks": 4,
+  "block_state_roots": [
+    "d46017e52596a0fbde92926e090dbbbd22488509f49adf9538c71bc662378173",
+    "b32522dfe47316bab659c34b15fb72b59878472eeb3085186036e0164a0d1425",
+    "f8788e6922f7d2d080cdfac7f59cb08d066e2fce6ae29f7de73b9002f88f7a0c",
+    "a00e46a403b63685a1a0aca121a178e3844cc6a0b6b329794607edeebc178f52"
+  ],
+  "final_state_root": "a00e46a403b63685a1a0aca121a178e3844cc6a0b6b329794607edeebc178f52",
+  "replica_matches": true
+}

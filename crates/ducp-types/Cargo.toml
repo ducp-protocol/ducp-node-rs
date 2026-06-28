@@ -9,3 +9,13 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
+borsh.workspace = true
+blake3.workspace = true
+ed25519-dalek.workspace = true
+getrandom.workspace = true
+serde.workspace = true
+hex.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true

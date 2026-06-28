@@ -1,6 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
+    "crates/ducp-types",
     "crates/dvm",
     "crates/verification",
     "crates/ledger",

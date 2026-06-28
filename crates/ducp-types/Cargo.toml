@@ -1,6 +1,6 @@
 [package]
-name = "ducp-ledger"
-description = "Settlement of UCU and the Standing reputation ledger"
+name = "ducp-types"
+description = "Canonical DUCP data model: identifiers, the Compute Proof, and the Quant (ℚ) efficiency observable"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -9,4 +9,3 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
-ducp-types = { path = "../ducp-types" }

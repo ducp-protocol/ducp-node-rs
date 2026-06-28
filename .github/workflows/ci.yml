@@ -15,8 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Rust
-        run: rustup toolchain install stable --component rustfmt clippy --profile minimal
+      - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - name: Format
         run: cargo fmt --all -- --check

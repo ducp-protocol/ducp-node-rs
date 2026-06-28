@@ -1,0 +1,34 @@
+{
+  "forged_result_hash": "babababababababababababababababababababababababababababababababa",
+  "true_result_hash": "ca5f7a1f407a1a35a21511f3341a86f34aada14cb485a1ad96286228a9a946e6",
+  "verdict_is_fraud": true,
+  "requester": {
+    "id": "8a88e3dd7409f195fd52db2d3cba5d72ca6709bf1d94121bf3748801b40f6f5c",
+    "balance": "99990000000",
+    "escrowed": "0",
+    "bonded": "0"
+  },
+  "provider": {
+    "id": "8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394",
+    "balance": "95000007142",
+    "escrowed": "0",
+    "bonded": "4999978574"
+  },
+  "challenger": {
+    "id": "ed4928c628d1c2c6eae90338905995612959273a5c63f93636c14614ac8737d1",
+    "balance": "100000007142",
+    "escrowed": "0",
+    "bonded": "0"
+  },
+  "provider_standing": {
+    "id": "8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394",
+    "sp": "0",
+    "last_decay_epoch": 0,
+    "strikes": 1
+  },
+  "minted": "300000000071",
+  "burned": "7213",
+  "fee_pool": "10000000",
+  "conserved": true,
+  "state_root": "bc634ab64be17981157015001d73a5db7bfff7b742649a6e1bd4e9d30b6559ef"
+}

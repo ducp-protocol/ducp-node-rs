@@ -1,0 +1,40 @@
+{
+  "state_root": "185a4051471ed15becb9cfb40b7dcb679d457f5a3ec9639b983beecf61f7f0b7",
+  "requester": {
+    "id": "8a88e3dd7409f195fd52db2d3cba5d72ca6709bf1d94121bf3748801b40f6f5c",
+    "balance": "95990000000",
+    "escrowed": "0",
+    "bonded": "0"
+  },
+  "provider": {
+    "id": "8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394",
+    "balance": "99040000000",
+    "escrowed": "0",
+    "bonded": "5000000000"
+  },
+  "provider_standing": {
+    "id": "8139770ea87d175f56a35466c34c7ecccb8d8a91b4ee37a25df60f5b8fc9b394",
+    "sp": "4000000000",
+    "last_decay_epoch": 0,
+    "strikes": 0
+  },
+  "receipt": {
+    "task": "3aa7e2573318aa44cefeb9ad80d0e3feff046678d4c12555adf38d7bcbca85d5",
+    "paid_to_provider": "4000000000",
+    "work_issuance": "40000000",
+    "validator_fee": "10000000",
+    "standing_delta": "4000000000",
+    "settled_epoch": 0,
+    "clawback_until": 32
+  },
+  "q_entry": {
+    "task": "3aa7e2573318aa44cefeb9ad80d0e3feff046678d4c12555adf38d7bcbca85d5",
+    "ucu": "4000000000",
+    "q": null,
+    "seal_grade": null,
+    "boundary": null,
+    "benchmark": 0
+  },
+  "minted": "200040000000",
+  "fee_pool": "10000000"
+}

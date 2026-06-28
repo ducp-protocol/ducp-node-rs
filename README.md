@@ -2,37 +2,93 @@
 
 The reference implementation of the **Decentralized Universal Compute Protocol (DUCP)**, in Rust.
 
-> **Status:** scaffold for spec **v0.1.0** — not yet functional. This repository lays out the architecture; the subsystems are stubs.
+> **Status:** **Profile 0** (MVP / devnet) reference node for spec **v0.2.0** — functional end to end. A single-sequencer devnet accepts a task, executes it deterministically, verifies it by sampled re-execution / open challenge, and settles it with real 𝕌 and Standing accounting. Advanced tiers (TEE/ZK, BFT, trustless energy attestation, on-chain governance) sit behind traits as documented seams.
 
 > **"node" means a network participant** — the software you run to take part in the DUCP network (as a Provider, Validator, etc.). It is **not** Node.js and contains no JavaScript.
 
 ## What this is
 
-A node implementation of the DUCP protocol. The protocol itself — the white paper and the normative specification — lives in [`ducp-protocol/spec`](https://github.com/ducp-protocol/spec). This repository implements **spec v0.1.0**.
+A node implementation of the DUCP protocol. The protocol itself — the white paper and the normative specification — lives in [`ducp-protocol/spec`](https://github.com/ducp-protocol/spec). This repository implements **spec v0.2.0**, **Profile 0** (the build-ready subset in `spec/implementation/`).
+
+Profile 0 locks the buildable choices — **WebAssembly** IR (wasmtime), **single-sequencer** devnet, **sampled re-execution** — while preserving every protocol invariant. The Quant (ℚ) efficiency observable is recorded as the reward-neutral **(𝕌, ℚ)** pair from genesis (ℚ null until energy attestation exists).
 
 ## Workspace layout
 
 | Crate | Path | Responsibility |
 |---|---|---|
-| `ducp-dvm` | `crates/dvm` | The DUCP Virtual Machine — deterministic execution and 𝕌 (UCU) metering |
-| `ducp-verification` | `crates/verification` | Layered verification: TEE attestation, ZK proofs, sampled re-execution |
-| `ducp-ledger` | `crates/ledger` | Settlement of 𝕌 and the Standing reputation ledger |
-| `ducp-consensus` | `crates/consensus` | Transaction ordering and finality |
-| `ducp-governance` | `crates/governance` | Reputation-weighted, role-chamber governance |
-| `ducp-node` | `node` | The binary that wires the subsystems into a runnable node |
+| `ducp-types` | `crates/ducp-types` | Canonical data model: identifiers, tasks, records, txs/blocks, the Compute Proof, and the ℚ types; borsh codec, BLAKE3 hashing, Ed25519 keys |
+| `ducp-dvm` | `crates/dvm` | The DUCP Virtual Machine — deterministic WebAssembly execution and fuel-based 𝕌 metering; the benchmark; the `Ir` registry seam |
+| `ducp-verification` | `crates/verification` | Sampled re-execution + challenge; the `EnergyAttestor` seam (ℚ); reserved TEE/ZK verifier seams |
+| `ducp-ledger` | `crates/ledger` | The state machine: accounts, 𝕌, Standing, the ℚ-ledger, settlement, fraud resolution, clawback/finality |
+| `ducp-consensus` | `crates/consensus` | Transaction ordering and finality — `SingleSequencer` (BFT is a later `ConsensusEngine`) |
+| `ducp-governance` | `crates/governance` | Static parameter set (devnet defaults); the `ParamSource` on-chain-governance seam |
+| `ducp-node` | `node` | The node binary + JSON-RPC server, mempool, scheduler, keystore, blob store; plus the `ducp-worker` load driver |
+| `ducp-conformance` | `crates/conformance` | Loads the published golden vectors and checks them against the reference crates |
 
 ## Build & run
 
-```
+```bash
 cargo build
-cargo run -p ducp-node
+cargo test --workspace        # unit + integration + conformance
+
+# Run a single-sequencer node:
+cargo run -p ducp-node -- --listen 127.0.0.1:8645
 ```
 
-Requires a recent stable Rust toolchain (pinned in `rust-toolchain.toml`).
+Requires a recent stable Rust toolchain (pinned in `rust-toolchain.toml`); the DVM uses [wasmtime](https://wasmtime.dev/).
+
+### Devnet demo (1 sequencer + 1 worker)
+
+```bash
+PORT=8650 TASKS=5 scripts/devnet.sh
+```
+
+This starts a sequencer and runs the beachhead workload against it over JSON-RPC — `submit → claim → execute → proof → settle`, repeatedly — printing the settled 𝕌 and the (𝕌, ℚ) record for each task.
+
+## Architecture & milestones
+
+The node was built along the Profile 0 roadmap (`spec/implementation/README.md`):
+
+| # | Milestone | What it delivers |
+|---|---|---|
+| M0 | Data model + codecs | `ducp-types`: canonical borsh encoding, BLAKE3 hashing, Ed25519, the ℚ types |
+| M1 | Wasm DVM + metering | deterministic wasmtime runtime, fuel → 𝕌, the benchmark, deterministic failures |
+| M2 | Devnet ledger | accounts, escrow, settlement, Standing, the ℚ-ledger; `I-LEDGER-CONSERVE` |
+| M3 | End-to-end | single-sequencer consensus + JSON-RPC node; `submit → settle` over RPC |
+| M4 | Verification | sampled re-execution + open challenge; clawback, offsetting burn, fine, Standing floor |
+| M5 | Clawback + finality | bonded stake locked then released; settled tx never rewritten (`I-ECON-FINAL`) |
+| M6 | Devnet + dogfood | multi-process devnet, state-machine replication, beachhead workload |
+
+## The Quant (ℚ) efficiency observable
+
+Every settled task records the reward-neutral **(𝕌, ℚ)** pair (DP-0001, spec/09). On the live devnet ℚ is **null** (`NullAttestor`, no energy measured) and the efficiency multiplier on Standing is `1.0`, so base settlement is strictly 𝕌-proportional (`I-Q-REWARDNEUTRAL`). The **Sealed-ℚ floor** computation and the three gated Power-Seal checks are implemented (`SealedAttestor`) and verified against the DP-0001 §9 / spec/09 §10 conformance vector — four providers, identical 𝕌 and payment, ℚ ≈ {0.43, 1.00, 1.64, null}.
+
+## Conformance test vectors
+
+Published in [`test-vectors/`](test-vectors/) and checked by `ducp-conformance`. Six families:
+
+| Family | Source | Milestone |
+|---|---|---|
+| `codec/` | spec/implementation/01 §7 | M0 |
+| `metering/` | spec/implementation/02 §5 | M1 |
+| `settlement/` | spec/implementation/04 §3 | M2/M3/M5 |
+| `fraud/` | spec/implementation/03 §4, 04 §4 | M4/M5 |
+| `replication/` | spec/implementation/04 §6 | M6 |
+| `q-observable/` | spec/09 §10, DP-0001 §9 | ℚ |
+
+Regenerate after an intentional change:
+
+```bash
+cargo run -p ducp-conformance --bin gen-vectors
+```
+
+## Profile 0 scope & deferred seams
+
+Out of scope for Profile 0, each represented by a trait so it is additive later: TEE/ZK tiers (`Verifier`), BFT consensus (`ConsensusEngine`), trustless energy attestation and the efficiency bonus (`EnergyAttestor`), multiple IRs (`IrRegistry`), on-chain governance (`ParamSource`), and persistent/Merkle state (`Storage`). Provisional choices (borsh, BLAKE3, Ed25519, `UCU_DECIMALS = 9`, the fuel cost model) are tuned on devnet and frozen toward 1.0.
 
 ## Specification <-> implementation
 
-This implementation pins to a specific specification version; the current target is **DUCP spec v0.1.0**. Anything that would change the protocol belongs first as a proposal in the [spec repo](https://github.com/ducp-protocol/spec/tree/main/proposals) — this repository implements the spec, it does not define it.
+This implementation pins to a specification version; the current target is **DUCP spec v0.2.0**. Anything that would change the protocol belongs first as a proposal in the [spec repo](https://github.com/ducp-protocol/spec/tree/main/proposals) — this repository implements the spec, it does not define it.
 
 ## Contributing
 

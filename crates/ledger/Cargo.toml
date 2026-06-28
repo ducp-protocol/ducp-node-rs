@@ -1,6 +1,6 @@
 [package]
 name = "ducp-ledger"
-description = "Settlement of UCU and the Standing reputation ledger"
+description = "Settlement of UCU, the Standing reputation ledger, and the ℚ-ledger"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -9,4 +9,6 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
-ducp-types = { path = "../ducp-types" }
+ducp-types.workspace = true
+ducp-governance.workspace = true
+borsh.workspace = true

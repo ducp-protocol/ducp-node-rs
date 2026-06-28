@@ -8,7 +8,7 @@ members = [
     "crates/consensus",
     "crates/governance",
     "crates/conformance",
-    "node",
+    "ducp-node",
 ]
 
 [workspace.package]

@@ -14,6 +14,8 @@ Profile 0 locks the buildable choices — **WebAssembly** IR (wasmtime), **singl
 
 ## Workspace layout
 
+This repository is a **Cargo workspace**: reusable protocol crates live under `crates/`, and the runnable node is a separate member at `ducp-node/`. That split is deliberate — libraries stay small, dependency boundaries stay explicit, and each crate can be tested and versioned on its own — while the root `Cargo.toml` stays a thin workspace manifest (not a monolithic `src/` tree). Putting the binary crate in `ducp-node/` (rather than at the repo root) keeps that layout symmetric and leaves room for additional binaries without cluttering the workspace root.
+
 | Crate | Path | Responsibility |
 |---|---|---|
 | `ducp-types` | `crates/ducp-types` | Canonical data model: identifiers, tasks, records, txs/blocks, the Compute Proof, and the ℚ types; borsh codec, BLAKE3 hashing, Ed25519 keys |
@@ -22,7 +24,7 @@ Profile 0 locks the buildable choices — **WebAssembly** IR (wasmtime), **singl
 | `ducp-ledger` | `crates/ledger` | The state machine: accounts, 𝕌, Standing, the ℚ-ledger, settlement, fraud resolution, clawback/finality |
 | `ducp-consensus` | `crates/consensus` | Transaction ordering and finality — `SingleSequencer` (BFT is a later `ConsensusEngine`) |
 | `ducp-governance` | `crates/governance` | Static parameter set (devnet defaults); the `ParamSource` on-chain-governance seam |
-| `ducp-node` | `node` | The node binary + JSON-RPC server, mempool, scheduler, keystore, blob store; plus the `ducp-worker` load driver |
+| `ducp-node` | `ducp-node` | The node binary + JSON-RPC server, mempool, scheduler, keystore, blob store; plus the `ducp-worker` load driver |
 | `ducp-conformance` | `crates/conformance` | Loads the published golden vectors and checks them against the reference crates |
 
 ## Build & run

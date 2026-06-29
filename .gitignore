@@ -6,5 +6,6 @@
 
 # Editor / OS cruft
 .DS_Store
+.cursor/
 
 # Cargo.lock IS committed: this workspace produces a binary (the node).

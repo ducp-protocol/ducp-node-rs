@@ -8,7 +8,7 @@
 //! (spec/bindings/04 §6). A BFT engine is a later `impl ConsensusEngine` with
 //! no change to the ledger.
 //!
-//! Specification: <https://github.com/ducp-protocol/spec>
+//! Specification: <https://github.com/ducp-protocol/ducp-spec>
 //! Status: Reference implementation for DUCP-SPEC v0.2.0.
 
 use ducp_governance::Params;

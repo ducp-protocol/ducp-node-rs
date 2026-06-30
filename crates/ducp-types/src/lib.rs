@@ -3,8 +3,8 @@
 //! Canonical DUCP data model shared by every conforming node — identifiers, tasks,
 //! on-ledger records, transactions, blocks, and the **Quant (ℚ)** efficiency
 //! observable. Field shapes and encodings follow the reference-node binding specification
-//! ([`spec/bindings/01`](https://github.com/ducp-protocol/spec)) and
-//! [`spec/09`](https://github.com/ducp-protocol/spec) (DP-0001).
+//! ([`spec/bindings/01`](https://github.com/ducp-protocol/ducp-spec)) and
+//! [`spec/09`](https://github.com/ducp-protocol/ducp-spec) (DP-0001).
 //!
 //! ## Encoding & hashing (spec/bindings/01 §1)
 //! - **Canonical bytes**: `borsh`, fields in declaration order; no floats in any
@@ -15,7 +15,7 @@
 //! - **Wire form** (JSON-RPC): binary as hex strings, amounts as decimal strings
 //!   (see the `serde(with = ...)` field attributes).
 //!
-//! Specification: <https://github.com/ducp-protocol/spec>
+//! Specification: <https://github.com/ducp-protocol/ducp-spec>
 //! Status: Reference implementation for DUCP-SPEC v0.2.0.
 
 use borsh::{BorshDeserialize, BorshSerialize};

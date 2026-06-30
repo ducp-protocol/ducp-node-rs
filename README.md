@@ -8,7 +8,7 @@ The reference implementation of the **Decentralized Universal Compute Protocol (
 
 ## What this is
 
-A node implementation of the DUCP protocol. The protocol itself — the white paper, normative specification, and reference-node binding — lives in [`ducp-protocol/spec`](https://github.com/ducp-protocol/spec). This repository is the **reference implementation** for **DUCP-SPEC v0.2.0**, conforming to the pinned choices in [`spec/bindings/`](https://github.com/ducp-protocol/spec/tree/main/spec/bindings).
+A node implementation of the DUCP protocol. The protocol itself — the white paper, normative specification, and reference-node binding — lives in [`ducp-protocol/ducp-spec`](https://github.com/ducp-protocol/ducp-spec). This repository is the **reference implementation** for **DUCP-SPEC v0.2.0**, conforming to the pinned choices in [`spec/bindings/`](https://github.com/ducp-protocol/ducp-spec/tree/main/spec/bindings).
 
 The reference-node binding pins the buildable choices — **WebAssembly** IR (wasmtime), **single-sequencer** devnet, **sampled re-execution** — while preserving every protocol invariant. The Quant (ℚ) efficiency observable is recorded as the reward-neutral **(𝕌, ℚ)** pair from genesis (ℚ null until energy attestation exists).
 
@@ -90,11 +90,11 @@ Out of scope for this binding, each represented by a trait so it is additive lat
 
 ## Specification <-> implementation
 
-This implementation pins to a specification version; the current target is **DUCP spec v0.2.0**. Anything that would change the protocol belongs first as a proposal in the [spec repo](https://github.com/ducp-protocol/spec/tree/main/proposals) — this repository implements the spec, it does not define it.
+This implementation pins to a specification version; the current target is **DUCP spec v0.2.0**. Anything that would change the protocol belongs first as a proposal in the [ducp-spec repo](https://github.com/ducp-protocol/ducp-spec/tree/main/proposals) — this repository implements the spec, it does not define it.
 
 ## Contributing
 
-Contributions are welcome under the project's Contributor License Agreement — see [CONTRIBUTING](CONTRIBUTING.md) and the [CLA](https://github.com/ducp-protocol/spec/blob/main/CLA.md). All participation follows the [Code of Conduct](CODE_OF_CONDUCT.md).
+Contributions are welcome under the project's Contributor License Agreement — see [CONTRIBUTING](CONTRIBUTING.md) and the [CLA](https://github.com/ducp-protocol/ducp-spec/blob/main/CLA.md). All participation follows the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
 

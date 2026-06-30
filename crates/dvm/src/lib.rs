@@ -10,7 +10,7 @@
 //! same `{module, input, benchmark}`, every conforming DVM MUST produce the
 //! identical `output`, `result_hash`, and `ucu_count`.
 //!
-//! Specification: <https://github.com/ducp-protocol/spec>
+//! Specification: <https://github.com/ducp-protocol/ducp-spec>
 //! Status: Reference implementation for DUCP-SPEC v0.2.0.
 
 use borsh::{BorshDeserialize, BorshSerialize};

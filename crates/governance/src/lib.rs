@@ -8,7 +8,7 @@
 //! All rates are expressed in **parts-per-million** (ppm) so every computation is
 //! exact integer arithmetic — no floats anywhere on a consensus path.
 //!
-//! Specification: <https://github.com/ducp-protocol/spec>
+//! Specification: <https://github.com/ducp-protocol/ducp-spec>
 //! Status: Reference implementation for DUCP-SPEC v0.2.0.
 
 use ducp_types::{Sp, Ucu, UCU_SCALE};

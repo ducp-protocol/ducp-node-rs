@@ -1,4 +1,4 @@
-//! M1 conformance: metering golden vectors (spec/implementation/02 §5).
+//! M1 conformance: metering golden vectors (spec/bindings/02 §5).
 //!
 //! Verifies the deterministic 𝕌 derivation: the reference workload meters to
 //! exactly one 𝕌, two independent runs agree, and the committed vectors match the

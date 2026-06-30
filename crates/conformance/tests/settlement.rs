@@ -1,8 +1,8 @@
-//! M2/M3 conformance: settlement golden vector (spec/implementation/04 §3).
+//! M2/M3 conformance: settlement golden vector (spec/bindings/04 §3).
 //!
 //! Pins the post-state of a happy-path settlement and checks the cross-cutting
 //! invariants on the published vector: conservation (`I-LEDGER-CONSERVE`) and the
-//! reward-neutral (𝕌, ℚ) entry with ℚ null in Profile 0 (`I-Q-NULL`).
+//! reward-neutral (𝕌, ℚ) entry with ℚ null in this binding (`I-Q-NULL`).
 
 use ducp_conformance::{load_json, settlement_record, SettlementRecord};
 

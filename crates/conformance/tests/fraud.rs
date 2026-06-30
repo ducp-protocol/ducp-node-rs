@@ -1,4 +1,4 @@
-//! M4/M5 conformance: fraud golden vector (spec/implementation/03 §4, 04 §4).
+//! M4/M5 conformance: fraud golden vector (spec/bindings/03 §4, 04 §4).
 //!
 //! A forged proof is settled optimistically, challenged, re-executed, and slashed.
 //! Pins the post-state and verifies conservation across the fraud path.

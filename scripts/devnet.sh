@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Profile 0 devnet demo: 1 single-sequencer node + 1 worker.
+# reference-node binding devnet demo: 1 single-sequencer node + 1 worker.
 #
 # Starts a ducp-node sequencer, then runs the beachhead workload against it via
 # JSON-RPC (submit -> claim -> execute -> proof -> settle), repeatedly.

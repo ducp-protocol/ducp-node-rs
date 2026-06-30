@@ -1,18 +1,18 @@
 //! # ducp-verification
 //!
-//! Profile 0 verification: the universal **sampled re-execution** floor plus open
-//! challenge (spec/implementation/03). Because the DVM is deterministic, a check is
+//! Reference-node binding verification: the universal **sampled re-execution** floor plus open
+//! challenge (spec/bindings/03). Because the DVM is deterministic, a check is
 //! exact — re-run on the same `{module, input, benchmark}` and compare the
 //! `result_hash` and `ucu_count` byte-for-byte. TEE/ZK are reserved tiers.
 //!
 //! The optional [`EnergyAttestor`] seam (DP-0001, spec/09) validates a Power Seal
-//! into a recorded ℚ. On the live path Profile 0 wires [`NullAttestor`], so ℚ stays
+//! into a recorded ℚ. On the live path This binding wires [`NullAttestor`], so ℚ stays
 //! a reward-neutral, unmeasured observable; a real `impl EnergyAttestor` lands later
 //! with no change to the proof path. Verifiers validate attestations as evidence —
 //! they never re-measure energy (`I-VERIFY-RUNONCE`).
 //!
 //! Specification: <https://github.com/ducp-protocol/spec>
-//! Status: Profile 0 implementation for spec v0.2.0.
+//! Status: Reference implementation for DUCP-SPEC v0.2.0.
 
 use ducp_dvm::{Benchmark, Dvm};
 use ducp_types::{
@@ -45,13 +45,13 @@ impl VerifyOutcome {
 
 /// A verification tier. Adding a tier is an additional `impl Verifier` plus a
 /// tier-assignment rule, with no change to the lifecycle or ledger
-/// (spec/implementation/03 §5).
+/// (spec/bindings/03 §5).
 pub trait Verifier {
     /// The tier this verifier implements.
     fn tier(&self) -> VerificationTier;
 
     /// Re-derive and compare. For sampled re-execution this re-runs the DVM and
-    /// compares the `result_hash` **and** `ucu_count` exactly (spec/implementation/03
+    /// compares the `result_hash` **and** `ucu_count` exactly (spec/bindings/03
     /// §2.2).
     fn check(
         &self,
@@ -64,7 +64,7 @@ pub trait Verifier {
     ) -> VerifyOutcome;
 }
 
-/// The Profile 0 verifier: exact re-execution.
+/// The binding verifier: exact re-execution.
 pub struct SampledReexecVerifier;
 
 impl Verifier for SampledReexecVerifier {
@@ -93,9 +93,9 @@ impl Verifier for SampledReexecVerifier {
     }
 }
 
-/// **Reserved** TEE-attestation verifier (spec/implementation/03; out of scope for
-/// Profile 0). Present as a seam: a later profile implements `check` to validate a
-/// hardware attestation cheaply. Profile 0 never assigns this tier, so `check` is
+/// **Reserved** TEE-attestation verifier (spec/bindings/03; out of scope for
+/// this binding). Present as a seam: a later tier implements `check` to validate a
+/// hardware attestation cheaply. This binding never assigns this tier, so `check` is
 /// unreachable here.
 pub struct TeeVerifier;
 
@@ -113,14 +113,14 @@ impl Verifier for TeeVerifier {
         _dvm: &dyn Dvm,
     ) -> VerifyOutcome {
         unimplemented!(
-            "TEE tier is reserved; not implemented in Profile 0 (spec/implementation/03)"
+            "TEE tier is reserved; not implemented in this binding (spec/bindings/03)"
         )
     }
 }
 
-/// **Reserved** ZK-proof verifier (spec/implementation/03; out of scope for Profile
-/// 0). Present as a seam; a later profile implements `check` to verify a succinct
-/// proof. Profile 0 never assigns this tier.
+/// **Reserved** ZK-proof verifier (spec/bindings/03; out of scope for this binding
+/// 0). Present as a seam; a later tier implements `check` to verify a succinct
+/// proof. This binding never assigns this tier.
 pub struct ZkVerifier;
 
 impl Verifier for ZkVerifier {
@@ -136,7 +136,7 @@ impl Verifier for ZkVerifier {
         _benchmark: &Benchmark,
         _dvm: &dyn Dvm,
     ) -> VerifyOutcome {
-        unimplemented!("ZK tier is reserved; not implemented in Profile 0 (spec/implementation/03)")
+        unimplemented!("ZK tier is reserved; not implemented in this binding (spec/bindings/03)")
     }
 }
 
@@ -144,7 +144,7 @@ impl Verifier for ZkVerifier {
 
 const PPM: u128 = 1_000_000;
 
-/// Deterministic audit draw (spec/implementation/03 §2.1):
+/// Deterministic audit draw (spec/bindings/03 §2.1):
 /// `selected = blake3(block_hash ‖ task_id)[0..8] < p · 2^64`. Reproducible and not
 /// gameable by the Provider.
 pub fn is_sampled(block_hash: &Hash, task: &TaskId, audit_prob_ppm: u128) -> bool {
@@ -158,7 +158,7 @@ pub fn is_sampled(block_hash: &Hash, task: &TaskId, audit_prob_ppm: u128) -> boo
 }
 
 /// Deterministically choose a re-executor from the eligible set, excluding the
-/// original Provider (spec/implementation/03 §2.2), by the same seed. `None` if no
+/// original Provider (spec/bindings/03 §2.2), by the same seed. `None` if no
 /// eligible worker remains.
 pub fn select_reexecutor(
     block_hash: &Hash,
@@ -190,7 +190,7 @@ pub trait EnergyAttestor {
     fn attest(&self, seal: &PowerSeal, ucu_count: Ucu, benchmark: &Benchmark) -> Option<Quant>;
 }
 
-/// Profile 0 **live** attestor: no energy is measured, so ℚ is always `None`
+/// This binding's **live** attestor: no energy is measured, so ℚ is always `None`
 /// (`efficiency_mult = 1.0`). This is what the devnet wires, keeping base settlement
 /// strictly 𝕌-proportional.
 pub struct NullAttestor;
@@ -218,7 +218,7 @@ impl EnergyAttestor for SealedAttestor {
 }
 
 /// (a) Evidence validity (spec/09 §6.1): the attestation must be present (chains to a
-/// root of trust and binds the Task Hash). Profile 0 checks the evidence reference is
+/// root of trust and binds the Task Hash). This binding checks the evidence reference is
 /// non-empty; real chain validation lands with the TEE tier.
 fn evidence_valid(seal: &PowerSeal) -> bool {
     seal.attestation_evidence != [0u8; 32]

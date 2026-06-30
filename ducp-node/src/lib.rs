@@ -9,7 +9,7 @@
 //!
 //! "node" means a *network participant*; it is unrelated to Node.js.
 //!
-//! Specification: <https://github.com/ducp-protocol/spec>
+//! Specification: <https://github.com/ducp-protocol/ducp-spec>
 //! Status: Reference implementation for DUCP-SPEC v0.2.0.
 
 use std::collections::BTreeMap;

@@ -4,7 +4,7 @@
 //! the software you run to take part in DUCP (as a Provider, Validator, and so on).
 //! It is unrelated to Node.js and contains no JavaScript.
 //!
-//! Specification: <https://github.com/ducp-protocol/spec>
+//! Specification: <https://github.com/ducp-protocol/ducp-spec>
 //! Status: Reference node for DUCP-SPEC v0.2.0 (reference-node binding).
 
 use std::net::SocketAddr;

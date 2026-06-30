@@ -11,7 +11,7 @@
 //! Regenerate the committed vector files with the generator binary:
 //! `cargo run -p ducp-conformance --bin gen-vectors`.
 //!
-//! Specification: <https://github.com/ducp-protocol/spec>
+//! Specification: <https://github.com/ducp-protocol/ducp-spec>
 
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;

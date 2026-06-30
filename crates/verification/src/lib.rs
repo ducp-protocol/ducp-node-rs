@@ -11,7 +11,7 @@
 //! with no change to the proof path. Verifiers validate attestations as evidence —
 //! they never re-measure energy (`I-VERIFY-RUNONCE`).
 //!
-//! Specification: <https://github.com/ducp-protocol/spec>
+//! Specification: <https://github.com/ducp-protocol/ducp-spec>
 //! Status: Reference implementation for DUCP-SPEC v0.2.0.
 
 use ducp_dvm::{Benchmark, Dvm};

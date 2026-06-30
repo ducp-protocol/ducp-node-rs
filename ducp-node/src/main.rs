@@ -5,7 +5,7 @@
 //! It is unrelated to Node.js and contains no JavaScript.
 //!
 //! Specification: <https://github.com/ducp-protocol/spec>
-//! Status: Profile 0 reference node for spec v0.2.0.
+//! Status: Reference node for DUCP-SPEC v0.2.0 (reference-node binding).
 
 use std::net::SocketAddr;
 
@@ -13,7 +13,7 @@ use clap::Parser;
 use ducp_node::{start_server, NodeHandle};
 use ducp_types::{keys, Identity, Ucu, UCU_SCALE};
 
-/// Run a DUCP Profile 0 node (single-sequencer devnet).
+/// Run a DUCP reference node (single-sequencer devnet).
 #[derive(Parser, Debug)]
 #[command(name = "ducp-node", version, about)]
 struct Cli {
@@ -87,7 +87,7 @@ async fn main() -> anyhow::Result<()> {
         "DUCP node (Rust reference implementation) v{}",
         env!("CARGO_PKG_VERSION")
     );
-    println!("  implements DUCP specification v0.2.0 (Profile 0)");
+    println!("  implements DUCP specification v0.2.0 (reference-node binding)");
     println!("  sequencer  {}", hex::encode(proposer));
     println!(
         "  benchmark  v{} (fuel_per_ucu={})",

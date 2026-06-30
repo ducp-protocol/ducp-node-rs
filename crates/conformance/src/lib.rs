@@ -1,11 +1,11 @@
 //! # ducp-conformance
 //!
-//! Profile 0 conformance harness. Loads the published golden vectors from the
+//! Reference-node binding conformance harness. Loads the published golden vectors from the
 //! workspace-root `test-vectors/` directory and exposes helpers + canonical sample
 //! values the per-milestone integration tests (under `tests/`) check the reference
 //! crates against.
 //!
-//! The six vector families (spec/implementation/05 §5, spec/09 §10):
+//! The six vector families (spec/bindings/05 §5, spec/09 §10):
 //! `codec`, `metering`, `settlement`, `fraud`, `replication`, `q-observable`.
 //!
 //! Regenerate the committed vector files with the generator binary:
@@ -40,7 +40,7 @@ pub fn unhex(s: &str) -> Vec<u8> {
     hex::decode(s).unwrap_or_else(|e| panic!("bad hex {s:?}: {e}"))
 }
 
-/// One codec/hash golden vector (spec/implementation/01 §7): a value, its canonical
+/// One codec/hash golden vector (spec/bindings/01 §7): a value, its canonical
 /// (borsh) bytes as hex, and the BLAKE3-256 of those bytes.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CodecRecord {
@@ -199,7 +199,7 @@ pub mod samples {
     }
 }
 
-/// One metering golden vector (spec/implementation/02 §5): a canonical module +
+/// One metering golden vector (spec/bindings/02 §5): a canonical module +
 /// input and its deterministic `{total_fuel, ucu_count, result_hash}` under the
 /// devnet benchmark. `total_fuel` is wasmtime-fuel-model-specific (provisional).
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -248,7 +248,7 @@ pub fn metering_records() -> Vec<MeteringRecord> {
         .collect()
 }
 
-/// The settlement golden vector (spec/implementation/04 §3): the post-state of a
+/// The settlement golden vector (spec/bindings/04 §3): the post-state of a
 /// `submit → claim → proof → settle` happy path. Pins the economic outcome, the
 /// Receipt, the (𝕌, ℚ) entry (ℚ null in P0), and the `state_root`.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -333,7 +333,7 @@ pub fn settlement_record() -> SettlementRecord {
     }
 }
 
-/// The replication golden vector (spec/implementation/04 §6): producing then
+/// The replication golden vector (spec/bindings/04 §6): producing then
 /// replaying a sequence of blocks reaches the identical `state_root` — state-machine
 /// replication, so the devnet is verifiable even with one proposer.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -433,7 +433,7 @@ pub fn replication_record() -> ReplicationRecord {
     }
 }
 
-/// The finality golden vector (spec/implementation/04 §3): a settled task whose
+/// The finality golden vector (spec/bindings/04 §3): a settled task whose
 /// clawback window closes, releasing the claim stake while the Receipt stays
 /// immutable (`I-ECON-FINAL`).
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -519,7 +519,7 @@ pub fn finality_record() -> FinalityRecord {
     }
 }
 
-/// The fraud golden vector (spec/implementation/03 §4, 04 §4): a forged proof, the
+/// The fraud golden vector (spec/bindings/03 §4, 04 §4): a forged proof, the
 /// re-execution verdict, and the post-resolution state (clawback, burn, fine,
 /// Standing floor). Verifies `I-LEDGER-CONSERVE` across the fraud path.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -778,7 +778,7 @@ mod tests {
 
     #[test]
     fn all_six_vector_families_present() {
-        // spec/implementation/05 §5 (five) + spec/09 §10 (ℚ).
+        // spec/bindings/05 §5 (five) + spec/09 §10 (ℚ).
         let families = [
             ("codec", "types.json"),
             ("metering", "cases.json"),

@@ -1,6 +1,6 @@
 [package]
 name = "ducp-governance"
-description = "Reputation-weighted, role-chamber governance (Profile 0: static parameter set)"
+description = "Reputation-weighted, role-chamber governance (binding: static parameter set)"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true

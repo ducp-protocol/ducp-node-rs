@@ -10,7 +10,7 @@ use std::fs;
 fn main() {
     let dir = ducp_conformance::vectors_dir();
 
-    // --- codec / hash (M0, spec/implementation/01 §7) ---
+    // --- codec / hash (M0, spec/bindings/01 §7) ---
     let codec_dir = dir.join("codec");
     fs::create_dir_all(&codec_dir).expect("create codec dir");
     let records = ducp_conformance::codec_records();
@@ -19,7 +19,7 @@ fn main() {
     fs::write(&path, format!("{json}\n")).expect("write codec vectors");
     println!("wrote {} ({} records)", path.display(), records.len());
 
-    // --- metering (M1, spec/implementation/02 §5) ---
+    // --- metering (M1, spec/bindings/02 §5) ---
     let metering_dir = dir.join("metering");
     fs::create_dir_all(&metering_dir).expect("create metering dir");
     let metering = ducp_conformance::metering_records();
@@ -28,7 +28,7 @@ fn main() {
     fs::write(&path, format!("{json}\n")).expect("write metering vectors");
     println!("wrote {} ({} records)", path.display(), metering.len());
 
-    // --- settlement (M2/M3, spec/implementation/04 §3) ---
+    // --- settlement (M2/M3, spec/bindings/04 §3) ---
     let settlement_dir = dir.join("settlement");
     fs::create_dir_all(&settlement_dir).expect("create settlement dir");
     let settlement = ducp_conformance::settlement_record();
@@ -37,14 +37,14 @@ fn main() {
     fs::write(&path, format!("{json}\n")).expect("write settlement vector");
     println!("wrote {}", path.display());
 
-    // --- finality / clawback window (M5, spec/implementation/04 §3) ---
+    // --- finality / clawback window (M5, spec/bindings/04 §3) ---
     let finality = ducp_conformance::finality_record();
     let json = serde_json::to_string_pretty(&finality).expect("serialize finality");
     let path = settlement_dir.join("finality.json");
     fs::write(&path, format!("{json}\n")).expect("write finality vector");
     println!("wrote {}", path.display());
 
-    // --- fraud (M4/M5, spec/implementation/03 §4, 04 §4) ---
+    // --- fraud (M4/M5, spec/bindings/03 §4, 04 §4) ---
     let fraud_dir = dir.join("fraud");
     fs::create_dir_all(&fraud_dir).expect("create fraud dir");
     let fraud = ducp_conformance::fraud_record();
@@ -53,7 +53,7 @@ fn main() {
     fs::write(&path, format!("{json}\n")).expect("write fraud vector");
     println!("wrote {}", path.display());
 
-    // --- replication (M6, spec/implementation/04 §6) ---
+    // --- replication (M6, spec/bindings/04 §6) ---
     let replication_dir = dir.join("replication");
     fs::create_dir_all(&replication_dir).expect("create replication dir");
     let replication = ducp_conformance::replication_record();

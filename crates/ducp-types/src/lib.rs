@@ -2,11 +2,11 @@
 //!
 //! Canonical DUCP data model shared by every conforming node — identifiers, tasks,
 //! on-ledger records, transactions, blocks, and the **Quant (ℚ)** efficiency
-//! observable. Field shapes and encodings follow the Profile 0 specification
-//! ([`spec/implementation/01`](https://github.com/ducp-protocol/spec)) and
+//! observable. Field shapes and encodings follow the reference-node binding specification
+//! ([`spec/bindings/01`](https://github.com/ducp-protocol/spec)) and
 //! [`spec/09`](https://github.com/ducp-protocol/spec) (DP-0001).
 //!
-//! ## Encoding & hashing (spec/implementation/01 §1)
+//! ## Encoding & hashing (spec/bindings/01 §1)
 //! - **Canonical bytes**: `borsh`, fields in declaration order; no floats in any
 //!   hashed structure (the ℚ types are integer-only by construction).
 //! - **Hash**: BLAKE3-256 over canonical bytes ([`hash_canonical`]).
@@ -16,7 +16,7 @@
 //!   (see the `serde(with = ...)` field attributes).
 //!
 //! Specification: <https://github.com/ducp-protocol/spec>
-//! Status: Profile 0 implementation for spec v0.2.0.
+//! Status: Reference implementation for DUCP-SPEC v0.2.0.
 
 use borsh::{BorshDeserialize, BorshSerialize};
 use serde::{Deserialize, Serialize};
@@ -29,7 +29,7 @@ pub fn version() -> &'static str {
 // ============================ Identifiers (01 §2) ============================
 
 pub type Hash = [u8; 32];
-pub type Identity = [u8; 32]; // Ed25519 public key (Profile 0)
+pub type Identity = [u8; 32]; // Ed25519 public key (reference-node binding)
 pub type Signature = [u8; 64]; // Ed25519 signature
 pub type ContentId = Hash; // hash of an off-ledger payload
 pub type TaskId = Hash; // = hash(canonical(TaskBody))
@@ -120,7 +120,7 @@ pub enum Reject {
 
 // ============================ Tasks (01 §3) =================================
 
-/// Intermediate representation. Profile 0 has exactly one IR.
+/// Intermediate representation. This binding has exactly one IR.
 #[derive(
     Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, BorshSerialize, BorshDeserialize,
 )]
@@ -140,7 +140,7 @@ pub struct Limits {
 }
 
 /// Verification tier, assigned by the DVM at submit — never chosen
-/// (`I-VERIFY-NOCHOICE`). Profile 0 assigns `SampledReexec` to every task.
+/// (`I-VERIFY-NOCHOICE`). This binding assigns `SampledReexec` to every task.
 #[derive(
     Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, BorshSerialize, BorshDeserialize,
 )]
@@ -223,7 +223,7 @@ pub struct Submission {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, BorshSerialize, BorshDeserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum TierData {
-    SampledReexec, // Profile 0: determinism enables exact re-check
+    SampledReexec, // binding: determinism enables exact re-check
     Tee {
         #[serde(with = "wire::bytes_vec")]
         attestation: Vec<u8>,
@@ -364,7 +364,7 @@ pub enum Boundary {
 /// A recorded ℚ value as fixed-point **micro-ℚ** (ℚ × 1_000_000).
 ///
 /// Integer by construction: no floats appear in any hashed structure
-/// (spec/implementation/01 §1). ℚ = 1.0 (`micro_q == 1_000_000`) is frontier-grade;
+/// (spec/bindings/01 §1). ℚ = 1.0 (`micro_q == 1_000_000`) is frontier-grade;
 /// below 1.0 is behind the frontier, above 1.0 is ahead of it.
 #[derive(
     Debug,
@@ -432,7 +432,7 @@ pub struct QLedgerEntry {
 }
 
 impl QLedgerEntry {
-    /// A reward-neutral entry with no energy attestation — the Profile 0 default for
+    /// A reward-neutral entry with no energy attestation — the binding default for
     /// every task: 𝕌 recorded, ℚ unmeasured (`I-Q-NULL`).
     pub fn unmeasured(task: TaskId, ucu: Ucu, benchmark: BenchmarkVersion) -> Self {
         QLedgerEntry {

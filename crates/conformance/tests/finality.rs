@@ -1,4 +1,4 @@
-//! M5 conformance: clawback-window finality (spec/implementation/04 §3).
+//! M5 conformance: clawback-window finality (spec/bindings/04 §3).
 //!
 //! After the clawback window closes with no successful challenge, the claim stake is
 //! released while the settled Receipt stays immutable (`I-ECON-FINAL`).

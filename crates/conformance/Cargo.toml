@@ -1,6 +1,6 @@
 [package]
 name = "ducp-conformance"
-description = "DUCP Profile 0 conformance harness: loads the published test vectors and checks them against the reference crates"
+description = "DUCP Reference-node binding conformance harness: loads the published test vectors and checks them against the reference crates"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true

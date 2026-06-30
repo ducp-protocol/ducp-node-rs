@@ -1,4 +1,4 @@
-//! M6 conformance: state-machine replication (spec/implementation/04 §6).
+//! M6 conformance: state-machine replication (spec/bindings/04 §6).
 //!
 //! Producing then replaying a block sequence reaches the identical `state_root`, so
 //! every node converges on the same ledger state even with a single proposer.

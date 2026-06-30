@@ -1,19 +1,19 @@
 //! # ducp-ledger
 //!
 //! The deterministic ledger state machine: accounts and 𝕌, the separate Standing
-//! reputation ledger, and the on-chain **ℚ-ledger** (spec/implementation/04,
+//! reputation ledger, and the on-chain **ℚ-ledger** (spec/bindings/04,
 //! spec/09 §7). [`apply`] is a pure transition `State × SignedTx → State`.
 //!
 //! Base reward is strictly **𝕌-proportional**. The efficiency multiplier (DP-0001,
-//! spec/09) is the only place ℚ could touch accrual — and in Profile 0 it is fixed
+//! spec/09) is the only place ℚ could touch accrual — and in this binding it is fixed
 //! at 1.0, so ℚ is recorded but inert (`I-Q-REWARDNEUTRAL`). Every settled task
-//! records a `(𝕌, ℚ)` entry from genesis, with ℚ null in Profile 0 (`I-Q-NULL`).
+//! records a `(𝕌, ℚ)` entry from genesis, with ℚ null in this binding (`I-Q-NULL`).
 //!
 //! Conservation (`I-LEDGER-CONSERVE`): after every transition,
 //! `Σ(balance + escrowed + bonded) + fee_pool == minted − burned`.
 //!
 //! Specification: <https://github.com/ducp-protocol/spec>
-//! Status: Profile 0 implementation for spec v0.2.0.
+//! Status: Reference implementation for DUCP-SPEC v0.2.0.
 
 use borsh::{BorshDeserialize, BorshSerialize};
 use ducp_governance::Params;
@@ -37,7 +37,7 @@ pub struct Supply {
 }
 
 /// An open challenge against a settled task: the challenger and their posted bond
-/// (spec/implementation/03 §3). Resolved by re-execution within the clawback window.
+/// (spec/bindings/03 §3). Resolved by re-execution within the clawback window.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, BorshSerialize, BorshDeserialize)]
 pub struct ChallengeRecord {
     pub challenger: Identity,
@@ -90,7 +90,7 @@ impl State {
     }
 
     /// The 𝕌 commitment to the whole state: `BLAKE3(canonical(State))` (provisional;
-    /// a Merkle commitment replaces it later — spec/implementation/04 §6).
+    /// a Merkle commitment replaces it later — spec/bindings/04 §6).
     pub fn state_root(&self) -> Hash {
         hash_canonical(self)
     }
@@ -306,7 +306,7 @@ impl State {
             s.status = TaskStatus::Settled;
         }
 
-        // ℚ-ledger genesis MUST (spec/09 §7.1): record (𝕌, ℚ). In Profile 0 the
+        // ℚ-ledger genesis MUST (spec/09 §7.1): record (𝕌, ℚ). In this binding the
         // EnergyAttestor is Null, so ℚ is null regardless of any `power_seal`
         // (I-Q-NULL, I-Q-REWARDNEUTRAL).
         self.q_ledger.insert(
@@ -316,7 +316,7 @@ impl State {
     }
 
     /// Open a challenge against a settled task within its clawback window
-    /// (spec/implementation/03 §3): lock the challenger's bond and record it.
+    /// (spec/bindings/03 §3): lock the challenger's bond and record it.
     fn open_challenge(
         &mut self,
         challenger: Identity,
@@ -389,7 +389,7 @@ pub fn apply(state: &State, stx: &SignedTx, params: &Params) -> Result<State, Re
 
 /// Advance the epoch boundary: apply Standing decay deterministically to every
 /// identity (`I-STAND-DECAY`), then release any claim stake whose clawback window
-/// has closed without a successful challenge (spec/implementation/04 §3). The
+/// has closed without a successful challenge (spec/bindings/04 §3). The
 /// settled Receipt is never rewritten — release is a stake movement, not a reversal
 /// (`I-ECON-FINAL`).
 pub fn advance_epoch(state: &State, params: &Params) -> State {
@@ -440,13 +440,13 @@ pub fn advance_to_epoch(state: &State, target: Epoch, params: &Params) -> State 
     s
 }
 
-/// Convenience: build the Profile 0 reward-neutral ℚ-ledger entry for a settled task
+/// Convenience: build the binding's reward-neutral ℚ-ledger entry for a settled task
 /// (𝕌 recorded, ℚ null — `I-Q-NULL`).
 pub fn q_ledger_entry_p0(task: TaskId, ucu: Ucu, benchmark: BenchmarkVersion) -> QLedgerEntry {
     QLedgerEntry::unmeasured(task, ucu, benchmark)
 }
 
-/// Apply the penalties for proven fraud on a settled task (spec/implementation/04
+/// Apply the penalties for proven fraud on a settled task (spec/bindings/04
 /// §4): clawback the payment from bonded stake, burn the work-issuance, slash a
 /// fine (rewarding the auditor), and floor the offender's Standing. Economic
 /// reversal is via **stake**, never by rewriting the settled tx (`I-ECON-FINAL`).
@@ -526,7 +526,7 @@ pub fn resolve_fraud(
 /// Resolve an open challenge given the re-execution verdict (`fraud`). On fraud:
 /// apply penalties (rewarding the challenger) and return the challenger's bond. On a
 /// failed challenge: the challenger forfeits the bond (burned, anti-spam,
-/// spec/implementation/03 §3).
+/// spec/bindings/03 §3).
 pub fn resolve_challenge(state: &State, task: TaskId, fraud: bool, params: &Params) -> State {
     let mut s = state.clone();
     let pc = match s.pending_challenges.remove(&task) {

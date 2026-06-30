@@ -1,7 +1,7 @@
 //! # ducp_node
 //!
-//! Profile 0 reference node: wires the DVM, ledger, single-sequencer consensus, and
-//! governance parameters behind a JSON-RPC server (spec/implementation/05).
+//! Reference node: wires the DVM, ledger, single-sequencer consensus, and
+//! governance parameters behind a JSON-RPC server (spec/bindings/05).
 //!
 //! The node accepts signed transactions, orders them into single-sequencer blocks,
 //! applies the deterministic ledger transition, and exposes read queries — including
@@ -10,7 +10,7 @@
 //! "node" means a *network participant*; it is unrelated to Node.js.
 //!
 //! Specification: <https://github.com/ducp-protocol/spec>
-//! Status: Profile 0 implementation for spec v0.2.0.
+//! Status: Reference implementation for DUCP-SPEC v0.2.0.
 
 use std::collections::BTreeMap;
 use std::net::SocketAddr;
@@ -39,8 +39,8 @@ pub fn version() -> &'static str {
 
 // ============================ Node state ===================================
 
-/// Persistence seam for ledger state (spec/implementation/04: the state commitment
-/// scheme is provisional). Profile 0 ships [`InMemoryStorage`]; a disk/Merkle-backed
+/// Persistence seam for ledger state (spec/bindings/04: the state commitment
+/// scheme is provisional). The reference-node binding uses [`InMemoryStorage`]; a disk/Merkle-backed
 /// store is a later `impl Storage` with no change to the node.
 pub trait Storage: Send + Sync {
     /// Persist the latest committed state snapshot.
@@ -49,7 +49,7 @@ pub trait Storage: Send + Sync {
     fn load(&self) -> Option<State>;
 }
 
-/// The Profile 0 in-memory state store (no durability).
+/// The binding in-memory state store (no durability).
 #[derive(Default)]
 pub struct InMemoryStorage {
     last: Mutex<Option<State>>,
@@ -118,7 +118,7 @@ impl NodeHandle {
     }
 
     /// Admit a signed transaction and produce a single-sequencer block immediately
-    /// (Profile 0 devnet finality). Returns the `TxId` on acceptance, or the ledger
+    /// (binding devnet finality). Returns the `TxId` on acceptance, or the ledger
     /// `Reject` reason. The block carries any settlement, mint, Standing update, and
     /// the (𝕌, ℚ) entry that the transition produced.
     pub fn submit(&self, stx: SignedTx) -> Result<TxId, Reject> {
@@ -148,7 +148,7 @@ impl NodeHandle {
     }
 
     /// Resolve an open challenge against `task` by re-executing the proof and
-    /// applying the verdict on-chain (spec/implementation/03 §3). Returns whether
+    /// applying the verdict on-chain (spec/bindings/03 §3). Returns whether
     /// fraud was found. The bond must already be locked (via a Challenge tx). The
     /// resolution is committed as a system block so the head and `state_root`
     /// advance.
@@ -387,7 +387,7 @@ pub struct GetBlobResp {
 
 // ============================ RPC API ======================================
 
-/// The Profile 0 JSON-RPC API (spec/implementation/05 §3). State-changing methods
+/// The binding JSON-RPC API (spec/bindings/05 §3). State-changing methods
 /// take a single positional `SignedTx`; read methods take positional scalar args.
 #[rpc(server, client, namespace_separator = "_")]
 pub trait DucpApi {

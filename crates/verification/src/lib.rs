@@ -112,9 +112,7 @@ impl Verifier for TeeVerifier {
         _benchmark: &Benchmark,
         _dvm: &dyn Dvm,
     ) -> VerifyOutcome {
-        unimplemented!(
-            "TEE tier is reserved; not implemented in this binding (spec/bindings/03)"
-        )
+        unimplemented!("TEE tier is reserved; not implemented in this binding (spec/bindings/03)")
     }
 }
 

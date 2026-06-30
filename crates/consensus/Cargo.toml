@@ -1,6 +1,6 @@
 [package]
 name = "ducp-consensus"
-description = "Transaction ordering and finality (Profile 0: single-sequencer devnet)"
+description = "Transaction ordering and finality (binding: single-sequencer devnet)"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true

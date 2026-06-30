@@ -2,15 +2,15 @@
 
 The reference implementation of the **Decentralized Universal Compute Protocol (DUCP)**, in Rust.
 
-> **Status:** **Profile 0** (MVP / devnet) reference node for spec **v0.2.0** — functional end to end. A single-sequencer devnet accepts a task, executes it deterministically, verifies it by sampled re-execution / open challenge, and settles it with real 𝕌 and Standing accounting. Advanced tiers (TEE/ZK, BFT, trustless energy attestation, on-chain governance) sit behind traits as documented seams.
+> **Status:** **Reference implementation** for DUCP-SPEC **v0.2.0** (reference-node binding, MVP / devnet) — functional end to end. A single-sequencer devnet accepts a task, executes it deterministically, verifies it by sampled re-execution / open challenge, and settles it with real 𝕌 and Standing accounting. Advanced tiers (TEE/ZK, BFT, trustless energy attestation, on-chain governance) sit behind traits as documented seams.
 
 > **"node" means a network participant** — the software you run to take part in the DUCP network (as a Provider, Validator, etc.). It is **not** Node.js and contains no JavaScript.
 
 ## What this is
 
-A node implementation of the DUCP protocol. The protocol itself — the white paper and the normative specification — lives in [`ducp-protocol/spec`](https://github.com/ducp-protocol/spec). This repository implements **spec v0.2.0**, **Profile 0** (the build-ready subset in `spec/implementation/`).
+A node implementation of the DUCP protocol. The protocol itself — the white paper, normative specification, and reference-node binding — lives in [`ducp-protocol/spec`](https://github.com/ducp-protocol/spec). This repository is the **reference implementation** for **DUCP-SPEC v0.2.0**, conforming to the pinned choices in [`spec/bindings/`](https://github.com/ducp-protocol/spec/tree/main/spec/bindings).
 
-Profile 0 locks the buildable choices — **WebAssembly** IR (wasmtime), **single-sequencer** devnet, **sampled re-execution** — while preserving every protocol invariant. The Quant (ℚ) efficiency observable is recorded as the reward-neutral **(𝕌, ℚ)** pair from genesis (ℚ null until energy attestation exists).
+The reference-node binding pins the buildable choices — **WebAssembly** IR (wasmtime), **single-sequencer** devnet, **sampled re-execution** — while preserving every protocol invariant. The Quant (ℚ) efficiency observable is recorded as the reward-neutral **(𝕌, ℚ)** pair from genesis (ℚ null until energy attestation exists).
 
 ## Workspace layout
 
@@ -49,7 +49,7 @@ This starts a sequencer and runs the beachhead workload against it over JSON-RPC
 
 ## Architecture & milestones
 
-The node was built along the Profile 0 roadmap (`spec/implementation/README.md`):
+The node was built along the reference-node binding roadmap (`spec/bindings/README.md`):
 
 | # | Milestone | What it delivers |
 |---|---|---|
@@ -71,11 +71,11 @@ Published in [`test-vectors/`](test-vectors/) and checked by `ducp-conformance`.
 
 | Family | Source | Milestone |
 |---|---|---|
-| `codec/` | spec/implementation/01 §7 | M0 |
-| `metering/` | spec/implementation/02 §5 | M1 |
-| `settlement/` | spec/implementation/04 §3 | M2/M3/M5 |
-| `fraud/` | spec/implementation/03 §4, 04 §4 | M4/M5 |
-| `replication/` | spec/implementation/04 §6 | M6 |
+| `codec/` | spec/bindings/01 §7 | M0 |
+| `metering/` | spec/bindings/02 §5 | M1 |
+| `settlement/` | spec/bindings/04 §3 | M2/M3/M5 |
+| `fraud/` | spec/bindings/03 §4, 04 §4 | M4/M5 |
+| `replication/` | spec/bindings/04 §6 | M6 |
 | `q-observable/` | spec/09 §10, DP-0001 §9 | ℚ |
 
 Regenerate after an intentional change:
@@ -84,9 +84,9 @@ Regenerate after an intentional change:
 cargo run -p ducp-conformance --bin gen-vectors
 ```
 
-## Profile 0 scope & deferred seams
+## Reference-node binding scope & deferred seams
 
-Out of scope for Profile 0, each represented by a trait so it is additive later: TEE/ZK tiers (`Verifier`), BFT consensus (`ConsensusEngine`), trustless energy attestation and the efficiency bonus (`EnergyAttestor`), multiple IRs (`IrRegistry`), on-chain governance (`ParamSource`), and persistent/Merkle state (`Storage`). Provisional choices (borsh, BLAKE3, Ed25519, `UCU_DECIMALS = 9`, the fuel cost model) are tuned on devnet and frozen toward 1.0.
+Out of scope for this binding, each represented by a trait so it is additive later: TEE/ZK tiers (`Verifier`), BFT consensus (`ConsensusEngine`), trustless energy attestation and the efficiency bonus (`EnergyAttestor`), multiple IRs (`IrRegistry`), on-chain governance (`ParamSource`), and persistent/Merkle state (`Storage`). Provisional choices (borsh, BLAKE3, Ed25519, `UCU_DECIMALS = 9`, the fuel cost model) are tuned on devnet and frozen toward 1.0.
 
 ## Specification <-> implementation
 

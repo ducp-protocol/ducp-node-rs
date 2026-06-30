@@ -1,15 +1,15 @@
 //! # ducp-consensus
 //!
-//! Transaction ordering and finality. Profile 0 ships [`SingleSequencer`]: one
+//! Transaction ordering and finality. The reference-node binding uses [`SingleSequencer`]: one
 //! designated node orders admitted txs (FIFO by arrival, ties by `TxId`), applies
 //! the ledger transition in order, and commits a `state_root`. Other nodes
 //! **replay** [`SingleSequencer::commit`] and MUST reach the identical root — this
 //! is state-machine replication, so the devnet is verifiable even with one proposer
-//! (spec/implementation/04 §6). A BFT engine is a later `impl ConsensusEngine` with
+//! (spec/bindings/04 §6). A BFT engine is a later `impl ConsensusEngine` with
 //! no change to the ledger.
 //!
 //! Specification: <https://github.com/ducp-protocol/spec>
-//! Status: Profile 0 implementation for spec v0.2.0.
+//! Status: Reference implementation for DUCP-SPEC v0.2.0.
 
 use ducp_governance::Params;
 use ducp_ledger::{apply, State};
@@ -38,7 +38,7 @@ pub struct Proposal {
     pub results: Vec<TxResult>,
 }
 
-/// The consensus interface (spec/implementation/04 §6). `produce` orders + applies
+/// The consensus interface (spec/bindings/04 §6). `produce` orders + applies
 /// admitted txs into a candidate block; `commit` deterministically replays a block,
 /// which is how replicas reach the identical `state_root`.
 pub trait ConsensusEngine {
@@ -57,7 +57,7 @@ pub trait ConsensusEngine {
     ) -> Result<State, Reject>;
 }
 
-/// The Profile 0 single-sequencer engine. Tracks the chain head (`height`,
+/// The binding single-sequencer engine. Tracks the chain head (`height`,
 /// `parent`) and the current `epoch`. `produce`/`commit` are pure with respect to
 /// the head; the head advances only via [`SingleSequencer::adopt`].
 #[derive(Debug, Clone)]

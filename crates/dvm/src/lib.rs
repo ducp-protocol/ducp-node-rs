@@ -1,8 +1,8 @@
 //! # ducp-dvm
 //!
-//! The Profile 0 DUCP Virtual Machine: a **deterministic WebAssembly runtime**
+//! The binding DUCP Virtual Machine: a **deterministic WebAssembly runtime**
 //! ([wasmtime]) that executes a task once and derives its 𝕌 count by fuel metering
-//! (spec/implementation/02).
+//! (spec/bindings/02).
 //!
 //! Determinism (`I-DVM-DET`): NaN canonicalization on; single-threaded; no ambient
 //! capabilities (no clock, randomness, filesystem, or network); the only host
@@ -11,7 +11,7 @@
 //! identical `output`, `result_hash`, and `ucu_count`.
 //!
 //! Specification: <https://github.com/ducp-protocol/spec>
-//! Status: Profile 0 implementation for spec v0.2.0.
+//! Status: Reference implementation for DUCP-SPEC v0.2.0.
 
 use borsh::{BorshDeserialize, BorshSerialize};
 use ducp_types::{hash_bytes, Hash, IrId, Limits, Ucu, UCU_SCALE};
@@ -32,7 +32,7 @@ const METER_FUEL_CEILING: u64 = 1 << 40;
 // =============================== Benchmark =================================
 
 /// The single consensus reference that fixes the scale of 𝕌 (`I-UNIT-ONEBENCH`,
-/// spec/implementation/02 §5). `fuel_per_ucu` is calibrated from the canonical
+/// spec/bindings/02 §5). `fuel_per_ucu` is calibrated from the canonical
 /// reference workload so that workload meters to exactly one 𝕌.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Benchmark {
@@ -89,7 +89,7 @@ const FUEL_COST_MODEL_ID: &[u8] = b"ducp.fuel.wasmtime.v46.profile0";
 // ============================ Execution outcome ===========================
 
 /// Why a task execution did not complete successfully. Deterministic and part of
-/// the canonical `result_hash` for failed runs (spec/implementation/02 §6).
+/// the canonical `result_hash` for failed runs (spec/bindings/02 §6).
 #[derive(Debug, Clone, PartialEq, Eq, BorshSerialize, BorshDeserialize)]
 pub enum FailureKind {
     /// Fuel ceiling (from `Limits.max_ucu`) exhausted before completion.
@@ -98,7 +98,7 @@ pub enum FailureKind {
     UserAbort(i32),
     /// A wasm trap (illegal instruction, OOB access, unreachable, …).
     Trap,
-    /// The module failed to validate/compile under the Profile 0 feature set.
+    /// The module failed to validate/compile under the binding Wasm feature set.
     InvalidModule,
     /// The module could not be instantiated (e.g. an unsatisfiable import — no
     /// ambient capabilities are provided).
@@ -137,11 +137,11 @@ fn failure_result_hash(kind: &FailureKind) -> Hash {
 
 // ================================ Dvm trait ===============================
 
-/// The DUCP Virtual Machine interface (spec/implementation/02 §7). `execute` is
+/// The DUCP Virtual Machine interface (spec/bindings/02 §7). `execute` is
 /// called once by the Provider; `execute`/`meter` are called by re-executors during
 /// sampling/challenge. Because both are deterministic, comparison is exact.
 pub trait Dvm {
-    /// Validate a module against the Profile 0 feature set. A module using a
+    /// Validate a module against the binding Wasm feature set. A module using a
     /// forbidden feature MUST be rejected at submit (`Reject::UnsupportedFeature`)
     /// and never reach metering.
     fn validate(&self, module: &[u8]) -> Result<(), ducp_types::Reject>;
@@ -205,19 +205,19 @@ impl Default for WasmtimeDvm {
 }
 
 impl WasmtimeDvm {
-    /// Build a DVM with the Profile 0 determinism configuration.
+    /// Build a DVM with the binding determinism configuration.
     pub fn new() -> Self {
         let mut config = Config::new();
         config.consume_fuel(true);
         config.cranelift_nan_canonicalization(true);
-        // No nondeterministic / out-of-scope proposals (spec/implementation/02 §1).
+        // No nondeterministic / out-of-scope proposals (spec/bindings/02 §1).
         config.wasm_simd(false);
         config.wasm_relaxed_simd(false);
         config.wasm_threads(false);
         config.wasm_reference_types(false);
         config.wasm_function_references(false);
         config.wasm_gc(false);
-        // Allowed Profile 0 features.
+        // Allowed binding Wasm features.
         config.wasm_bulk_memory(true);
         config.wasm_multi_value(true);
         let engine = Engine::new(&config).expect("valid deterministic wasmtime config");
@@ -372,7 +372,7 @@ impl WasmtimeDvm {
     }
 }
 
-/// Registry mapping an IR to its deterministic executor. Profile 0 has exactly one
+/// Registry mapping an IR to its deterministic executor. This binding has exactly one
 /// IR (WebAssembly); RISC-V / tensor IRs are added as additional entries here with
 /// no change to the task lifecycle (the `Ir` registry seam, spec/implementation
 /// README).

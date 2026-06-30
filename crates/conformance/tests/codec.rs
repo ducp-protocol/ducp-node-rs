@@ -1,4 +1,4 @@
-//! M0 conformance: codec / hash golden vectors (spec/implementation/01 §7).
+//! M0 conformance: codec / hash golden vectors (spec/bindings/01 §7).
 //!
 //! Pins the canonical (borsh) bytes and BLAKE3-256 hashes of the core data model,
 //! including the ℚ types. Regenerate with `cargo run -p ducp-conformance --bin

@@ -1,7 +1,7 @@
 //! # ducp-governance
 //!
-//! Profile 0 governance is a **static parameter set** ([`Params`]) held as config
-//! and set by the maintainer (spec/implementation/05 §4). At v1.0 these become
+//! Reference-node binding governance is a **static parameter set** ([`Params`]) held as config
+//! and set by the maintainer (spec/bindings/05 §4). At v1.0 these become
 //! on-chain, role-chamber governance parameters; here they fix the economic
 //! constants the ledger reads. They are **parameters, not invariants**.
 //!
@@ -9,7 +9,7 @@
 //! exact integer arithmetic — no floats anywhere on a consensus path.
 //!
 //! Specification: <https://github.com/ducp-protocol/spec>
-//! Status: Profile 0 implementation for spec v0.2.0.
+//! Status: Reference implementation for DUCP-SPEC v0.2.0.
 
 use ducp_types::{Sp, Ucu, UCU_SCALE};
 use serde::{Deserialize, Serialize};
@@ -22,7 +22,7 @@ pub fn version() -> &'static str {
 /// One million — the ppm denominator.
 pub const PPM: u128 = 1_000_000;
 
-/// The devnet parameter set (spec/implementation/05 §4). Values are provisional and
+/// The devnet parameter set (spec/bindings/05 §4). Values are provisional and
 /// tuned on devnet; they are config, not consensus invariants.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Params {
@@ -33,7 +33,7 @@ pub struct Params {
     pub fee_ppm: u128,
     /// Standing accrual rate (ppm of metered 𝕌). Default 1 SP per 𝕌 (1:1 at base scale).
     pub sp_rate_ppm: u128,
-    /// Efficiency multiplier on Standing accrual (ppm). Profile 0 = 1.0 (no energy
+    /// Efficiency multiplier on Standing accrual (ppm). this binding sets 1.0 (no energy
     /// measured); ℚ is recorded but inert (`I-Q-REWARDNEUTRAL`).
     pub efficiency_mult_ppm: u128,
     /// Standing decay per epoch (ppm). Default 2%.
@@ -63,7 +63,7 @@ impl Default for Params {
 }
 
 impl Params {
-    /// The Profile 0 devnet defaults (spec/implementation/05 §4).
+    /// The binding devnet defaults (spec/bindings/05 §4).
     pub const fn devnet() -> Self {
         Params {
             issuance_rate_ppm: 10_000,       // 1%
@@ -93,7 +93,7 @@ impl Params {
     }
 
     /// Standing accrual for metered work `u` under an efficiency multiplier (ppm):
-    /// `⌊sp_rate · u · efficiency_mult⌋`. Profile 0 passes `efficiency_mult = PPM`.
+    /// `⌊sp_rate · u · efficiency_mult⌋`. This binding passes `efficiency_mult = PPM`.
     pub fn standing_accrual(&self, u: Ucu, efficiency_mult_ppm: u128) -> Sp {
         (u * self.sp_rate_ppm / PPM * efficiency_mult_ppm / PPM) as Sp
     }
@@ -142,7 +142,7 @@ impl Params {
     }
 }
 
-/// Source of protocol parameters. Profile 0 uses [`StaticParams`] (a fixed set the
+/// Source of protocol parameters. This binding uses [`StaticParams`] (a fixed set the
 /// maintainer configures); at v1.0 an on-chain, role-chamber governance engine is a
 /// later `impl ParamSource` with no change to the ledger (spec 07). This is the
 /// governance seam.
@@ -151,7 +151,7 @@ pub trait ParamSource {
     fn params(&self) -> Params;
 }
 
-/// The Profile 0 static parameter source.
+/// The binding static parameter source.
 #[derive(Debug, Clone, Copy, Default)]
 pub struct StaticParams(pub Params);
 
